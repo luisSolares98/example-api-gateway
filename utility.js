@@ -3,10 +3,10 @@ const fetch = require('node-fetch');
 const middleware = async (req, next, url) => {
     const list = url.split(',');
     if (list.length < 2) {
-        req.data = await peticion(list[0]);
+        req.data = await peticionGet(list[0]);
     } else {
-        let users = await peticion(list[0]);
-        let posts = await peticion(list[1]);  
+        let users = await peticionGet(list[0]);
+        let posts = await peticionGet(list[1]);  
         
         let resp = [];
         
@@ -37,7 +37,7 @@ const middleware = async (req, next, url) => {
     next();
 }
 
-const peticion = async (url) => {
+const peticionGet = async (url) => {
     let respuesta ;
     await fetch(url)
     .then(response => response.json())
@@ -49,7 +49,25 @@ const peticion = async (url) => {
     });
     return respuesta;
 }
-
+const customHeaders = {
+    "Content-Type": "application/json",
+}
+const peticionPost = async (url, data) => {
+    let respuesta ;
+    await fetch(url,{
+        method: "POST",
+        headers: customHeaders,
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        respuesta = data;
+    })
+    .catch(error => {
+        respuesta = data;
+    });
+    return respuesta;
+}
 const { resolve } = require('path');
 const { readFileSync } = require('fs');
 const { load } = require('js-yaml');
