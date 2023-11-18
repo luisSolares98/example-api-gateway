@@ -157,9 +157,28 @@ app.post('/api/message', async function(req, res) {
   res.json({id: data.id});
 });
 
+// Get User
+app.get('/api/users', async function(req, res) {
+  const uuid = req.params.uuid;
+  let data =  await peticionGet(`http://localhost:6000/users`);
+  res.json(data);
+});
+
+// Get User by ID
+app.get('/api/user/:uuid', async function(req, res) {
+  const uuid = req.params.uuid;
+  let data =  await peticionGet(`http://localhost:6000/user/${uuid}`);
+  res.json(data);
+});
+
+// insert user
+app.post('/api/user', async function(req, res) {
+  let data =  await peticionPost(`http://localhost:6000/user/`, req.body);
+  res.json(data);
+});
 
 app.use('/', router);
 
-app.listen(5000, () => {
+app.listen(3000, () => {
     console.log("start application")
 })
