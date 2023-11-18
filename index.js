@@ -18,9 +18,9 @@ app.get('/api/property/:idProperty', async function(req, res) {
   const idProperty = req.params.idProperty;
   try {
     let data =  await peticionGet(`http://localhost:8082/airNUR/property/${idProperty}`);
-  let dataCharacteristic =  await peticionGet(`http://localhost:8082/airNUR/property/characteristic/${idProperty}`);
-  data.characteristics = dataCharacteristic;
-  res.json(data);
+    let dataCharacteristic =  await peticionGet(`http://localhost:8082/airNUR/property/characteristic/${idProperty}`);
+    data.characteristics = dataCharacteristic;
+    res.json(data);
   } catch (ex) {
     res.json({message: "Not found"}).status(400);
   }
@@ -42,8 +42,25 @@ app.get('/api/property/users/:idUser', async function(req, res) {
 
 // insert property
 app.post('/api/property', async function(req, res) {
-  let data =  await peticionPost(`http://localhost:8082/airNUR/property/`, req.body);
-  res.json({id: data.id});
+
+  let dataUser =  await peticionGet(`http://localhost:6000/user/${req.body.userId}`);
+
+  if(dataUser!=null) {
+      let data =  await peticionPost(`http://localhost:8082/airNUR/property/`, req.body);
+      res.json(data);
+  } else {
+      res.json({message: 'the user not exist'});
+  }
+
+});
+
+// delete property
+app.get('/api/property/delete/:idProperty', async function(req, res) {
+
+  const idProperty = req.params.idProperty;
+  let data =  await peticionGet(`http://localhost:8082/airNUR/property/delete/${idProperty}`);
+  res.json({id: data});
+
 });
 
 // insert characteristic
@@ -64,12 +81,13 @@ app.post('/api/reserve', async function(req, res) {
   let dataProperty =  await peticionGet(`http://localhost:8082/airNUR/property/${req.body.publishID}`);
   let dataUser =  await peticionGet(`http://localhost:6000/user/${req.body.userID}`);
 
-  let data = null ;
-  if(dataProperty.id && dataUser!=null) {
+  let data = null;
+  if(dataProperty != null && dataUser!=null) {
       let data =  await peticionPost(`http://localhost:9090/airNUR/reserve/`, req.body);
-      res.json({id: data.id});
+      res.json(data);
+  } else {
+    res.json({message: 'the data not exist'});
   }
-  res.json({message: 'the date not exist'});
 });
 
 // Get Reserve by ID
