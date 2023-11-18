@@ -16,10 +16,15 @@ app.get('/api/properties', async function(req, res) {
 // Get Property by ID
 app.get('/api/property/:idProperty', async function(req, res) {
   const idProperty = req.params.idProperty;
-  let data =  await peticionGet(`http://localhost:8082/airNUR/property/${idProperty}`);
+  try {
+    let data =  await peticionGet(`http://localhost:8082/airNUR/property/${idProperty}`);
   let dataCharacteristic =  await peticionGet(`http://localhost:8082/airNUR/property/characteristic/${idProperty}`);
   data.characteristics = dataCharacteristic;
   res.json(data);
+  } catch (ex) {
+    res.json({message: "Not found"}).status(400);
+  }
+  
 });
 
 // Get all characteristics
@@ -57,12 +62,14 @@ app.post('/api/property/characteristic', async function(req, res) {
 app.post('/api/reserve', async function(req, res) {
 
   let dataProperty =  await peticionGet(`http://localhost:8082/airNUR/property/${req.body.publishID}`);
+  let dataUser =  await peticionGet(`http://localhost:6000/user/${req.body.userID}`);
+
   let data = null ;
-  if(dataProperty.id) {
+  if(dataProperty.id && dataUser!=null) {
       let data =  await peticionPost(`http://localhost:9090/airNUR/reserve/`, req.body);
       res.json({id: data.id});
   }
-  res.json({message: 'the property does not exist'});
+  res.json({message: 'the date not exist'});
 });
 
 // Get Reserve by ID
@@ -141,7 +148,7 @@ app.get('/api/chats', async function(req, res) {
 // insert chat
 app.post('/api/chat', async function(req, res) {
   let data =  await peticionPost(`http://localhost:4000/chat/create`, req.body);
-  res.json({id: data.id});
+  res.json(data);
 });
 
 // Get Message by ID
