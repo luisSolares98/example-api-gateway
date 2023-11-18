@@ -118,11 +118,48 @@ app.get('/api/payment/:idPayment', async function(req, res) {
   res.json(data);
 });
 
+// Get Chat Host by ID
+app.get('/api/chat/host/:hostIdParam', async function(req, res) {
+  const hostIdParam = req.params.hostIdParam;
+  let data =  await peticionGet(`http://localhost:4000/chat/host/${hostIdParam}`);
+  res.json(data);
+});
 
+// Get Chat Guest by ID
+app.get('/api/chat/guest/:guestIdParam', async function(req, res) {
+  const guestIdParam = req.params.guestIdParam;
+  let data =  await peticionGet(`http://localhost:4000/chat/guest/${guestIdParam}`);
+  res.json(data);
+});
+
+// Get Chats All
+app.get('/api/chats', async function(req, res) {
+  let data =  await peticionGet(`http://localhost:4000/chats`);
+  res.json(data);
+});
+
+// insert chat
+app.post('/api/chat', async function(req, res) {
+  let data =  await peticionPost(`http://localhost:4000/chat/create`, req.body);
+  res.json({id: data.id});
+});
+
+// Get Message by ID
+app.get('/api/chat/guest/:chatIdParam', async function(req, res) {
+  const chatIdParam = req.params.chatIdParam;
+  let data =  await peticionGet(`http://localhost:4000/message/${chatIdParam}`);
+  res.json(data);
+});
+
+// insert message
+app.post('/api/message', async function(req, res) {
+  let data =  await peticionPost(`http://localhost:4000/chat/create`, req.body);
+  res.json({id: data.id});
+});
 
 
 app.use('/', router);
 
-app.listen(3000, () => {
+app.listen(5000, () => {
     console.log("start application")
 })
