@@ -152,7 +152,7 @@ app.post('/api/chat', async function(req, res) {
 });
 
 // Get Message by ID
-app.get('/api/chat/guest/:chatIdParam', async function(req, res) {
+app.get('/api/message/:chatIdParam', async function(req, res) {
   const chatIdParam = req.params.chatIdParam;
   let data =  await peticionGet(`http://localhost:4000/message/${chatIdParam}`);
   res.json(data);
@@ -161,7 +161,7 @@ app.get('/api/chat/guest/:chatIdParam', async function(req, res) {
 // insert message
 app.post('/api/message', async function(req, res) {
   let data =  await peticionPost(`http://localhost:4000/chat/create`, req.body);
-  res.json({id: data.id});
+  res.json(data);
 });
 
 // Get User
