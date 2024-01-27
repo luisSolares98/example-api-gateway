@@ -8,6 +8,7 @@ app.use(express.urlencoded({extended: true}));
 
 const URL_PROPERTY = 'http://137.184.128.169:8080/airNUR'
 const URL_RESERVE = 'http://161.35.232.16:8080/airNUR'
+const URL_CHAT_MESSAGE = 'http://147.182.253.73:4000'
 
 
 // Property And Characteristic
@@ -150,39 +151,39 @@ app.get('/api/payment/:idPayment', async function(req, res) {
 // Get Chat Host by ID
 app.get('/api/chat/host/:hostIdParam', async function(req, res) {
   const hostIdParam = req.params.hostIdParam;
-  let data =  await peticionGet(`http://localhost:4000/chat/host/${hostIdParam}`);
+  let data =  await peticionGet(`${URL_CHAT_MESSAGE}/chat/host/${hostIdParam}`);
   res.json(data);
 });
 
 // Get Chat Guest by ID
 app.get('/api/chat/guest/:guestIdParam', async function(req, res) {
   const guestIdParam = req.params.guestIdParam;
-  let data =  await peticionGet(`http://localhost:4000/chat/guest/${guestIdParam}`);
+  let data =  await peticionGet(`${URL_CHAT_MESSAGE}/chat/guest/${guestIdParam}`);
   res.json(data);
 });
 
 // Get Chats All
 app.get('/api/chats', async function(req, res) {
-  let data =  await peticionGet(`http://localhost:4000/chats`);
+  let data =  await peticionGet(`${URL_CHAT_MESSAGE}/chats`);
   res.json(data);
 });
 
 // insert chat
 app.post('/api/chat', async function(req, res) {
-  let data =  await peticionPost(`http://localhost:4000/chat/create`, req.body);
+  let data =  await peticionPost(`${URL_CHAT_MESSAGE}/chat/create`, req.body);
   res.json(data);
 });
 
 // Get Message by ID
 app.get('/api/message/:chatIdParam', async function(req, res) {
   const chatIdParam = req.params.chatIdParam;
-  let data =  await peticionGet(`http://localhost:4000/message/${chatIdParam}`);
+  let data =  await peticionGet(`${URL_CHAT_MESSAGE}/message/${chatIdParam}`);
   res.json(data);
 });
 
 // insert message
 app.post('/api/message', async function(req, res) {
-  let data =  await peticionPost(`http://localhost:4000/chat/create`, req.body);
+  let data =  await peticionPost(`${URL_CHAT_MESSAGE}/chat/create`, req.body);
   res.json(data);
 });
 
