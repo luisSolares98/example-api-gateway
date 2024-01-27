@@ -33,7 +33,7 @@ app.get('/api/property/:idProperty', async function(req, res) {
 
 // Get all characteristics
 app.get('/api/characteristics', async function(req, res) {
-  let data =  await peticionGet(`${URL_PROPERTY}/property/characteristic/`);
+  let data =  await peticionGet(`${URL_PROPERTY}/characteristic/`);
   res.json(data);
 });
 
