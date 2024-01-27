@@ -48,14 +48,8 @@ app.get('/api/property/users/:idUser', async function(req, res) {
 // insert property
 app.post('/api/property', async function(req, res) {
 
-  let dataUser =  await peticionGet(`http://localhost:6000/user/${req.body.userId}`);
-
-  if(dataUser!=null) {
-      let data =  await peticionPost(`${URL_PROPERTY}/property`, req.body);
-      res.json(data);
-  } else {
-      res.json({message: 'the user not exist'});
-  }
+    let data =  await peticionPost(`${URL_PROPERTY}/property`, req.body);
+    res.json(data);
 
 });
 
@@ -84,10 +78,9 @@ app.post('/api/property/characteristic', async function(req, res) {
 app.post('/api/reserve', async function(req, res) {
 
   let dataProperty =  await peticionGet(`${URL_PROPERTY}/property/${req.body.publishID}`);
-  let dataUser =  await peticionGet(`http://localhost:6000/user/${req.body.userID}`);
 
   let data = null;
-  if(dataProperty != null && dataUser!=null) {
+  if(dataProperty != null ) {
       let data =  await peticionPost(`${URL_RESERVE}/reserve/`, req.body);
       res.json(data);
   } else {
@@ -184,26 +177,6 @@ app.get('/api/message/:chatIdParam', async function(req, res) {
 // insert message
 app.post('/api/message', async function(req, res) {
   let data =  await peticionPost(`${URL_CHAT_MESSAGE}/chat/create`, req.body);
-  res.json(data);
-});
-
-// Get User
-app.get('/api/users', async function(req, res) {
-  const uuid = req.params.uuid;
-  let data =  await peticionGet(`http://localhost:6000/users`);
-  res.json(data);
-});
-
-// Get User by ID
-app.get('/api/user/:uuid', async function(req, res) {
-  const uuid = req.params.uuid;
-  let data =  await peticionGet(`http://localhost:6000/user/${uuid}`);
-  res.json(data);
-});
-
-// insert user
-app.post('/api/user', async function(req, res) {
-  let data =  await peticionPost(`http://localhost:6000/user/`, req.body);
   res.json(data);
 });
 
