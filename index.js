@@ -15,8 +15,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-const URL_PROPERTY = 'http://206.189.206.99:8080/airNUR'
-const URL_RESERVE = 'http://161.35.232.16:8080/airNUR'
+const URL_PROPERTY = 'http://165.227.192.71:8080/airNUR'
+const URL_RESERVE = 'http://161.35.232.16:9090/airNUR'
 const URL_CHAT_MESSAGE = 'http://147.182.253.73:4000'
 
 
@@ -108,7 +108,21 @@ app.get('/api/reserve/:idReserve', async function(req, res) {
 app.get('/api/reserve/users/:idUser', async function(req, res) {
   const idUser = req.params.idUser;
   let data =  await peticionGet(`${URL_RESERVE}/publish/users/${idUser}`);
-  res.json(data);
+
+  if(data && data.length > 0 ) {
+    let properties = [];
+
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      let property =  await peticionGet(`${URL_PROPERTY}/property/${element.publicationID}`);
+      properties.push(property);
+    }
+
+    res.json(properties);
+  } else {
+    res.json(null);
+  }
+
 });
 
 // Create CheckIn

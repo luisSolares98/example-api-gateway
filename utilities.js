@@ -28,6 +28,7 @@ const peticionPost = async (url, data) => {
         respuesta = data;
     })
     .catch(error => {
+        console.log(error)
         respuesta = null;
     });
     return respuesta;
