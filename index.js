@@ -6,10 +6,14 @@ const router = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+const URL_PROPERTY = 'http://137.184.128.169:8080/airNUR'
+const URL_RESERVE = 'http://161.35.232.16:8080/airNUR'
+
+
 // Property And Characteristic
 // Get all Property
 app.get('/api/properties', async function(req, res) {
-  let data =  await peticionGet('http://localhost:8082/airNUR/property/');
+  let data =  await peticionGet(`${URL_PROPERTY}/property/`);
   res.json(data);
 });
 
@@ -17,8 +21,8 @@ app.get('/api/properties', async function(req, res) {
 app.get('/api/property/:idProperty', async function(req, res) {
   const idProperty = req.params.idProperty;
   try {
-    let data =  await peticionGet(`http://localhost:8082/airNUR/property/${idProperty}`);
-    let dataCharacteristic =  await peticionGet(`http://localhost:8082/airNUR/property/characteristic/${idProperty}`);
+    let data =  await peticionGet(`${URL_PROPERTY}/property/${idProperty}`);
+    let dataCharacteristic =  await peticionGet(`${URL_PROPERTY}/property/characteristic/${idProperty}`);
     data.characteristics = dataCharacteristic;
     res.json(data);
   } catch (ex) {
@@ -29,14 +33,14 @@ app.get('/api/property/:idProperty', async function(req, res) {
 
 // Get all characteristics
 app.get('/api/characteristics', async function(req, res) {
-  let data =  await peticionGet('http://localhost:8082/airNUR/characteristic/');
+  let data =  await peticionGet(`${URL_PROPERTY}/characteristic/`);
   res.json(data);
 });
 
 // Get all Property BY userId
 app.get('/api/property/users/:idUser', async function(req, res) {
   const idUser = req.params.idUser;
-  let data =  await peticionGet(`http://localhost:8082/airNUR/property/users/${idUser}`);
+  let data =  await peticionGet(`${URL_PROPERTY}/property/users/${idUser}`);
   res.json(data);
 });
 
@@ -46,7 +50,7 @@ app.post('/api/property', async function(req, res) {
   let dataUser =  await peticionGet(`http://localhost:6000/user/${req.body.userId}`);
 
   if(dataUser!=null) {
-      let data =  await peticionPost(`http://localhost:8082/airNUR/property/`, req.body);
+      let data =  await peticionPost(`${URL_PROPERTY}/property`, req.body);
       res.json(data);
   } else {
       res.json({message: 'the user not exist'});
@@ -58,32 +62,32 @@ app.post('/api/property', async function(req, res) {
 app.get('/api/property/delete/:idProperty', async function(req, res) {
 
   const idProperty = req.params.idProperty;
-  let data =  await peticionGet(`http://localhost:8082/airNUR/property/delete/${idProperty}`);
+  let data =  await peticionGet(`${URL_PROPERTY}/property/delete/${idProperty}`);
   res.json({id: data});
 
 });
 
 // insert characteristic
 app.post('/api/characteristic', async function(req, res) {
-  let data =  await peticionPost(`http://localhost:8082/airNUR/characteristic/`, req.body);
+  let data =  await peticionPost(`${URL_PROPERTY}/characteristic/`, req.body);
   res.json({id: data.id});
 });
 
 // insert Property Characteristic
 app.post('/api/property/characteristic', async function(req, res) {
-  let data =  await peticionPost(`http://localhost:8082/airNUR/property/characteristic`, req.body);
+  let data =  await peticionPost(`${URL_PROPERTY}/property/characteristic`, req.body);
   res.json({id: data.id});
 });
 
 // Create Reserve
 app.post('/api/reserve', async function(req, res) {
 
-  let dataProperty =  await peticionGet(`http://localhost:8082/airNUR/property/${req.body.publishID}`);
+  let dataProperty =  await peticionGet(`${URL_PROPERTY}/property/${req.body.publishID}`);
   let dataUser =  await peticionGet(`http://localhost:6000/user/${req.body.userID}`);
 
   let data = null;
   if(dataProperty != null && dataUser!=null) {
-      let data =  await peticionPost(`http://localhost:9090/airNUR/reserve/`, req.body);
+      let data =  await peticionPost(`${URL_RESERVE}/reserve/`, req.body);
       res.json(data);
   } else {
     res.json({message: 'the data not exist'});
@@ -93,53 +97,53 @@ app.post('/api/reserve', async function(req, res) {
 // Get Reserve by ID
 app.get('/api/reserve/:idReserve', async function(req, res) {
   const idReserve = req.params.idReserve;
-  let data =  await peticionGet(`http://localhost:9090/airNUR/reserve/${idReserve}`);
+  let data =  await peticionGet(`${URL_RESERVE}/reserve/${idReserve}`);
   res.json(data);
 });
 
 // Get Reserve By userId
 app.get('/api/reserve/users/:idUser', async function(req, res) {
   const idUser = req.params.idUser;
-  let data =  await peticionGet(`http://localhost:9090/airNUR/publish/users/${idUser}`);
+  let data =  await peticionGet(`${URL_RESERVE}/publish/users/${idUser}`);
   res.json(data);
 });
 
 // Create CheckIn
 app.post('/api/checkIn', async function(req, res) {
-    let data =  await peticionPost(`http://localhost:9090/airNUR/checkIn/`, req.body);
+    let data =  await peticionPost(`${URL_RESERVE}/checkIn/`, req.body);
     res.json(data);
 });
 
 // Get CheckIn by ID
 app.get('/api/checkIn/:idCheckIn', async function(req, res) {
   const idCheckIn = req.params.idCheckIn;
-  let data =  await peticionGet(`http://localhost:9090/airNUR/checkIn/${idCheckIn}`);
+  let data =  await peticionGet(`${URL_RESERVE}/checkIn/${idCheckIn}`);
   res.json(data);
 });
 
 // Create CheckOut
 app.post('/api/checkOut', async function(req, res) {
-  let data =  await peticionPost(`http://localhost:9090/airNUR/checkOut/`, req.body);
+  let data =  await peticionPost(`${URL_RESERVE}/checkOut/`, req.body);
   res.json(data);
 });
 
 // Get CheckOut by ID
 app.get('/api/checkOut/:idCheckOut', async function(req, res) {
   const idCheckOut = req.params.idCheckOut;
-  let data =  await peticionGet(`http://localhost:9090/airNUR/checkOut/${idCheckOut}`);
+  let data =  await peticionGet(`${URL_RESERVE}/checkOut/${idCheckOut}`);
   res.json(data);
 });
 
 // Create Payment
 app.post('/api/payment', async function(req, res) {
-  let data =  await peticionPost(`http://localhost:9090/airNUR/payment/`, req.body);
+  let data =  await peticionPost(`${URL_RESERVE}/payment/`, req.body);
   res.json(data);
 });
 
 // Get Payment by ID
 app.get('/api/payment/:idPayment', async function(req, res) {
   const idPayment = req.params.idPayment;
-  let data =  await peticionGet(`http://localhost:9090/airNUR/payment/${idPayment}`);
+  let data =  await peticionGet(`${URL_RESERVE}/payment/${idPayment}`);
   res.json(data);
 });
 
