@@ -6,7 +6,7 @@ const router = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-const URL_PROPERTY = 'http://137.184.128.169:8080/airNUR'
+const URL_PROPERTY = 'http://143.198.177.97:8080/airNUR'
 const URL_RESERVE = 'http://161.35.232.16:8080/airNUR'
 
 
