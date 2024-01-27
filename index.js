@@ -3,10 +3,19 @@ const app = express();
 const { peticionGet, peticionPost } = require('./utilities.js')
 const router = express.Router();
 
+const cors = require('cors');
+const corsOptions = {
+  origin: '*', // Reemplaza con el origen de tu aplicación Angular
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Habilita el envío de cookies
+  optionsSuccessStatus: 204,
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-const URL_PROPERTY = 'http://143.198.177.97:8080/airNUR'
+const URL_PROPERTY = 'http://206.189.206.99:8080/airNUR'
 const URL_RESERVE = 'http://161.35.232.16:8080/airNUR'
 const URL_CHAT_MESSAGE = 'http://147.182.253.73:4000'
 
@@ -48,7 +57,7 @@ app.get('/api/property/users/:idUser', async function(req, res) {
 // insert property
 app.post('/api/property', async function(req, res) {
 
-    let data =  await peticionPost(`${URL_PROPERTY}/property`, req.body);
+    let data =  await peticionPost(`${URL_PROPERTY}/property/`, req.body);
     res.json(data);
 
 });
